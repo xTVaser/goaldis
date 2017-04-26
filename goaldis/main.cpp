@@ -6,6 +6,11 @@ set<string> seen;
 struct dgo_header {
 	uint32_t length;
 	char rootname[60]; // TODO assume that the lengths of the names is never any longer than 60 for jak2/3, might be an issue later
+
+    dgo_header(uint32_t length, char rootname) {
+        this->length = length;
+        this->rootname[60] = rootname; // TODO might not work as intended, check
+    }
 };
 
 bool isArtGroup(uint8_t *data, size_t size) {
@@ -121,21 +126,35 @@ void dumpRawBin(const char *outdir, MetaGoFile *go) {
 // Takes in one file that is already in a workable .go or .o format
 void dumpAsmFile(const char *outdir, const char *inputFile) {
 
+    printf("Loading %s...\n", inputFile);
+
+    FILE *file = fopen(inputFile, "rb");
+
+    uint32_t fileSize;
+    uint8_t *fileData;
+
+    fseek(file, 0, SEEK_END);
+    fileSize = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    fileData = new uint8_t[fileSize];
+    // Load all of the bytes from the file into the array
+    fread(fileData, 1, fileSize, file);
+    fclose(file);
+
     // Setup metagofile structure
     MetaGoFile *go = new MetaGoFile;
-    go->shouldDump = shouldDump;
-    go->name = entry->rootname;
-    go->fileName = name;
-    go->dgoname = dgoname;
-    go->rawdata.resize(entry->length);
+    go->shouldDump = true;
+    go->name = "eichar-ag"; // TODO temporary fixes here
+    go->fileName = "eichar-ag"; // In the ps3 files, they are already prefixed
+    go->dgoname = "ART.CGO";
+    go->rawdata.resize(fileSize);
 
-    //Main error here, access violation, the length value is way too huge due to above assumptions not working for jak2/3
-    memcpy(&go->rawdata[0], entryData, entry->length);
-    metaGoFiles.push_back(go);
+    // TODO hopefully this works, but just read the entire contents of the file into the struct
+    memcpy(&go->rawdata[0], fileData, fileSize);
 
     // TODO Display current go file, probably can get rid of this 
     metaLoadingGo = go;
-    link_and_exec(entryData, entry->length);
+    link_and_exec(fileData, fileSize);
     metaLoadingGo = NULL;
 
     // Dissassemble process
