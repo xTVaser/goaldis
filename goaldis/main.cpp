@@ -95,7 +95,7 @@ void loadDgo(const char *dgoname, bool shouldDump) {
 	delete[] fileData;
 }
 
-void dumpAsm(const char *outdir, MetaGoFile *go) {
+void dumpAsm(const char *outdir, MetaGoFile *go, bool ps3Rip) {
 	char fileName[1024];
 	sprintf(fileName, "%s\\%s.asm", outdir, go->fileName.c_str());
 
@@ -105,8 +105,8 @@ void dumpAsm(const char *outdir, MetaGoFile *go) {
 		exit(1);
 	}
 
-	disasmFile(fp, go, false);
-	disasmFile(fp, go, true);
+	disasmFile(fp, go, false, ps3Rip);
+	disasmFile(fp, go, true, ps3Rip);
 	fclose(fp);
 }
 
@@ -144,9 +144,9 @@ void dumpAsmFile(const char *outdir, const char *inputFile) {
     // Setup metagofile structure
     MetaGoFile *go = new MetaGoFile;
     go->shouldDump = true;
-    go->name = "eichar-ag"; // TODO temporary fixes here
-    go->fileName = "eichar-ag"; // In the ps3 files, they are already prefixed
-    go->dgoname = "ART.CGO";
+    go->name = "consite-bt"; // TODO temporary fixes here
+    go->fileName = "consite-bt"; // In the ps3 files, they are already prefixed
+    go->dgoname = "GAME.CGO";
     go->rawdata.resize(fileSize);
 
     // TODO hopefully this works, but just read the entire contents of the file into the struct
@@ -158,7 +158,7 @@ void dumpAsmFile(const char *outdir, const char *inputFile) {
     metaLoadingGo = NULL;
 
     // Dissassemble process
-    dumpAsm(outdir, go);
+    dumpAsm(outdir, go, true);
 }
 
 int main(int argc, char *argv[]) {
@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
 
 		loadDgo(inputFile, true);
 		for each (MetaGoFile *go in metaGoFiles)
-			dumpAsm(outdir, go);
+			dumpAsm(outdir, go, false);
 	}
 	else if (!strcmp(mode, "-file")) {
 		dumpAsmFile(outdir, inputFile);

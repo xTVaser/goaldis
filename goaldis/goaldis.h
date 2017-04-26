@@ -19,7 +19,7 @@ using namespace std;
 struct MetaGoFile;
 
 // Custom GOAL-based MIPS disassembler
-void disasmFile(FILE *_fp, MetaGoFile *go, bool final_pass);
+void disasmFile(FILE *_fp, MetaGoFile *go, bool final_pass, bool ps3Rip);
 
 // DGO linker/loader
 // Ported directly from the MIPS disassembly.

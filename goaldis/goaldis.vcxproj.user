@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='jak1 - smallfileworks|Win32'">
-    <LocalDebuggerCommandArguments>-file "H:\Jak Disassembly\goaldis\goaldis\test\Disassembly" "H:\Jak Disassembly\goaldis\goaldis\test\game-cnt.go"</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='jak1 - largefiledoesnt|Win32'">
-    <LocalDebuggerCommandArguments>-file "H:\Jak Disassembly\goaldis\goaldis\test\Disassembly" "H:\Jak Disassembly\goaldis\goaldis\test\eichar-ag.go"</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
 </Project>

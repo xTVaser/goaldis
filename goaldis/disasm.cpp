@@ -368,7 +368,7 @@ void disasmEnd()
 		labels.clear();
 }
 
-void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
+void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass, bool ps3Rip)
 {
 	disasmBegin(fp, go, final_pass);
 
@@ -392,18 +392,29 @@ void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
 
 		std::sort(objs.begin(), objs.end());
 
+        int i = 0;
 		for each (uint32_t *obj in objs)
 		{
+            i++;
+            /*  TODO Might be wrong about PS3 Difference here, so this may just be a hack
+                For whatever reason, the PS3 files are missing data at the end, perhaps this is due to these final bytes being something to link
+                the files together and that is not needed with the modifications for the remaster? 
+
+                This means the output disassembly is not 100% accurate, but for all of the beginning lines up to the end, it seems to be the same
+            */
+            if (objs.size() == i && ps3Rip == true) 
+                break;
+
 			if (obj < prev)
 				continue;
 
 			disasmData(prev, obj - 1, end);
 			prev = disasmObj(obj, s.start, end);
-			//assert(prev <= end); // The very last segment ends up throwing this error
+			assert(prev <= end);
 		}
 
-		//assert(prev <= end);
-		//disasmData(prev, end, end);
+		assert(prev <= end);
+		disasmData(prev, end, end);
 	}
 
 	// Renumber labels in order.
