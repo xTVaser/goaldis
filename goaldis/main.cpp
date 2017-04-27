@@ -123,10 +123,25 @@ void dumpRawBin(const char *outdir, MetaGoFile *go) {
 	fclose(out);
 }
 
+
 // Takes in one file that is already in a workable .go or .o format
-void dumpAsmFile(const char *outdir, const char *inputFile) {
+void dumpAsmFile(const char *outdir, char *inputFile) {
 
     printf("Loading %s...\n", inputFile);
+
+    // Get file name
+    // In the ps3 files, they are already prefixed
+    char *currentChar = &inputFile[strlen(inputFile)];
+    string fileName;
+    bool nameStarts = false;
+    while (*currentChar != '/') {
+
+        if (nameStarts)
+            fileName += *currentChar;
+        // Skip the extension
+        if (*currentChar == '.')
+            nameStarts = true;
+    }
 
     FILE *file = fopen(inputFile, "rb");
 
@@ -144,9 +159,9 @@ void dumpAsmFile(const char *outdir, const char *inputFile) {
     // Setup metagofile structure
     MetaGoFile *go = new MetaGoFile;
     go->shouldDump = true;
-    go->name = "consite-bt"; // TODO temporary fixes here
-    go->fileName = "consite-bt"; // In the ps3 files, they are already prefixed
-    go->dgoname = "GAME.CGO";
+    go->name = fileName; 
+    go->fileName = fileName; 
+    go->dgoname = "GAME.CGO"; // TODO may or may not be optional, never referenced anywhere
     go->rawdata.resize(fileSize);
 
     // read the entire contents of the file into the struct

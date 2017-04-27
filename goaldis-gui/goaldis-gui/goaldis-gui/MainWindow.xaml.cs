@@ -132,10 +132,10 @@ namespace goaldis_gui {
                 String dir = outputDir;
                 // for ps3 files, they are nested inside a final/game folder within the more general category
                 if (ps3 && individualFile is false)
-                    dir += Directory.GetParent(f).Parent.FullName.ToString();
+                    dir += "\\" + Directory.GetParent(f).Parent.FullName.ToString();
                 // Otherwise its ps2 and a container file
                 else if (ps3 is false)
-                    dir += System.IO.Path.GetFileNameWithoutExtension(f).ToString();
+                    dir += "\\" + System.IO.Path.GetFileNameWithoutExtension(f).ToString();
                 
                 // Spawn a thread for each exe call for speed and GUI updating purposes
                 Thread t = new Thread(() => runDisassembler(f, dir));
@@ -151,8 +151,8 @@ namespace goaldis_gui {
             ProcessStartInfo callExe = new ProcessStartInfo();
             callExe.CreateNoWindow = true;
             callExe.UseShellExecute = true;
-            callExe.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "goaldis.exe";
-            callExe.FileName = "H:\\Jak Disassembly\\goaldis\\goaldis.exe";
+            callExe.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();
+            callExe.FileName = "goaldis.exe";
             callExe.WindowStyle = ProcessWindowStyle.Hidden;
             if (ps3)
                 callExe.Arguments = "-file \"" + dir + "\" \"" + file + "\"";
