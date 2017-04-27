@@ -396,7 +396,8 @@ void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass, bool ps3Rip)
 		for each (uint32_t *obj in objs)
 		{
             i++;
-            /*  TODO Might be wrong about PS3 Difference here, so this may just be a hack
+            /*  
+                TODO Might be wrong about PS3 Difference here, so this may just be a hack
                 For whatever reason, the PS3 files are missing data at the end, perhaps this is due to these final bytes being something to link
                 the files together and that is not needed with the modifications for the remaster? 
 
