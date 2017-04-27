@@ -1,0 +1,14 @@
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\bin\Debug\goaldis-gui.exe.config
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\bin\Debug\goaldis-gui.exe
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\bin\Debug\goaldis-gui.pdb
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui.csprojResolveAssemblyReference.cache
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\MainWindow.g.cs
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\App.g.cs
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui_MarkupCompile.cache
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui_MarkupCompile.lref
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\MainWindow.baml
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui.g.resources
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis_gui.Properties.Resources.resources
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui.csproj.GenerateResource.Cache
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui.exe
+H:\Jak Disassembly\goaldis\goaldis-gui\goaldis-gui\goaldis-gui\obj\Debug\goaldis-gui.pdb
