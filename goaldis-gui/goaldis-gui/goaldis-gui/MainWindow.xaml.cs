@@ -40,9 +40,9 @@ namespace goaldis_gui {
         private void ps2Radio_Checked(object sender, RoutedEventArgs e) {
 
             ps3 = false;
-            fileButton.IsEnabled = false;
             submitBtn.IsEnabled = false;
             currentDir = "";
+            filePaths = new List<String>();
             infoMsg.Text = "Current Directory: " + currentDir + "\n";
             checkReady();
         }
@@ -53,6 +53,7 @@ namespace goaldis_gui {
             fileButton.IsEnabled = true;
             submitBtn.IsEnabled = false;
             currentDir = "";
+            filePaths = new List<String>();
             infoMsg.Text = "Current Directory: " + currentDir + "\n";
             checkReady();
         }
@@ -66,6 +67,7 @@ namespace goaldis_gui {
             individualFile = true;
             currentDir = result;
             infoMsg.Text = "Current File: " + currentDir + "\n";
+            filePaths = new List<String>();
             filePaths.Add(result);
             checkReady();
         }
@@ -81,6 +83,7 @@ namespace goaldis_gui {
             infoMsg.Text = "Current Directory: " + currentDir + "\n";
 
             // Search the directory for relevant files and add to list.
+            filePaths = new List<String>();
             String[] tempList = Directory.GetFiles(currentDir, "*.*", SearchOption.AllDirectories);
             String[] validExtensions = { ".cgo", ".dgo" };
             if (ps3)
@@ -126,13 +129,13 @@ namespace goaldis_gui {
             
             foreach (String f in filePaths) {
                 
-                String dir = outputDir + "\\";
+                String dir = outputDir;
                 // for ps3 files, they are nested inside a final/game folder within the more general category
                 if (ps3 && individualFile is false)
-                    dir += Directory.GetParent(f).Parent.FullName.ToString() + "\\";
+                    dir += Directory.GetParent(f).Parent.FullName.ToString();
                 // Otherwise its ps2 and a container file
                 else if (ps3 is false)
-                    dir += System.IO.Path.GetFileNameWithoutExtension(f).ToString() + "\\";
+                    dir += System.IO.Path.GetFileNameWithoutExtension(f).ToString();
                 
                 // Spawn a thread for each exe call for speed and GUI updating purposes
                 Thread t = new Thread(() => runDisassembler(f, dir));
@@ -142,13 +145,14 @@ namespace goaldis_gui {
 
         private void runDisassembler(String file, String dir) {
 
-            // TODO
-            //logBox.Text += "Started Disassembling " + file + "\n";
+            this.Dispatcher.Invoke(() => { logBox.Text += "Started Disassembling " + file + "\n"; });
             
+            // TODO rich textbox for some color, and horizontal scrollbar or wrap it
             ProcessStartInfo callExe = new ProcessStartInfo();
             callExe.CreateNoWindow = true;
             callExe.UseShellExecute = true;
-            callExe.FileName = "..\\goaldis.exe";
+            callExe.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "goaldis.exe";
+            callExe.FileName = "H:\\Jak Disassembly\\goaldis\\goaldis.exe";
             callExe.WindowStyle = ProcessWindowStyle.Hidden;
             if (ps3)
                 callExe.Arguments = "-file \"" + dir + "\" \"" + file + "\"";
@@ -161,10 +165,9 @@ namespace goaldis_gui {
                 }
             }
             catch {
-                // Log error.
             }
 
-            //logBox.Text += "Finished Disassembling " + file + ", stored at " + dir + "\n";
+            this.Dispatcher.Invoke(() => { logBox.Text += "Finished Disassembling " + file + ", stored at " + dir + "\n"; });
         }
 
         private String OpenFileDialog() {

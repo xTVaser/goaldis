@@ -1,8 +1,10 @@
-﻿  meta.cpp
-  main.cpp
+﻿  main.cpp
+  disasm.cpp
+  Generating Code...
+  Compiling...
+  meta.cpp
   machine.cpp
   link.cpp
-  disasm.cpp
   Generating Code...
   goaldis.vcxproj -> H:\Jak Disassembly\goaldis\goaldis\..\goaldis.exe
   goaldis.vcxproj -> ..\goaldis.pdb (Partial PDB)
