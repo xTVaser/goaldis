@@ -149,7 +149,7 @@ void dumpAsmFile(const char *outdir, const char *inputFile) {
     go->dgoname = "GAME.CGO";
     go->rawdata.resize(fileSize);
 
-    // TODO hopefully this works, but just read the entire contents of the file into the struct
+    // read the entire contents of the file into the struct
     memcpy(&go->rawdata[0], fileData, fileSize);
 
     // TODO Display current go file, probably can get rid of this 
@@ -163,7 +163,6 @@ void dumpAsmFile(const char *outdir, const char *inputFile) {
 
 int main(int argc, char *argv[]) {
 
-	// Add -file parameter to pass in an individual .go or .o files rather than a CGO or DGO container
 	if (argc < 4) {
 		fprintf(stderr, "PS2 DGO/CGO Usage: goaldis -bin/-asm output-dir input.dgo\n");
 		fprintf(stderr, "Inputs can be .CGO or .DGO\n");
@@ -178,34 +177,32 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "    Mode:\n");
 		fprintf(stderr, "        -bin       Extract raw binary files\n");
 		fprintf(stderr, "        -asm       Disassemble back to MIPS assembly\n");
+        // Added -file parameter to pass in an individual .go or .o files rather than a CGO or DGO container
 		fprintf(stderr, "        -file      Disassemble an individual .go or .o file\n");
 		return 1;
 	}
 
-	// TODO remove this comment later,  dumpall.bat H:\Jak2\disassembly H:\Jak2\
-
 	const char *mode = argv[1];
 	const char *outdir = argv[2];
-	const char *inputFile = argv[3];
+	const char *inputPath = argv[3];
 	
-	// TODO dont delete a directory if already created
 	_mkdir(outdir);
 	InitMachine();
 
 	if (!strcmp(mode, "-bin")) {
 
-		loadDgo(inputFile, true);
+		loadDgo(inputPath, true);
 		for (MetaGoFile *go : metaGoFiles)
 			dumpRawBin(outdir, go);
 	}
-	else if (!strcmp(mode, "-asm")) {
+	else if (!strcmp(mode, "-asm")) { // Individually takes in the CGO or DGO files
 
-		loadDgo(inputFile, true);
+		loadDgo(inputPath, true);
 		for each (MetaGoFile *go in metaGoFiles)
 			dumpAsm(outdir, go, false);
 	}
-	else if (!strcmp(mode, "-file")) {
-		dumpAsmFile(outdir, inputFile);
+	else if (!strcmp(mode, "-file")) { // Individually takes in a .go or .o file
+		dumpAsmFile(outdir, inputPath);
 	}
 
 	// Error occured

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,12 +17,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace goaldis_gui {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
 
         bool ps3 = false;
+        bool individualFile = false;
         List<String> filePaths = new List<String>();
         String currentDir = "";
         String outputDir = "";
@@ -59,8 +63,10 @@ namespace goaldis_gui {
             if (result == null)
                 return;
 
+            individualFile = true;
             currentDir = result;
             infoMsg.Text = "Current File: " + currentDir + "\n";
+            filePaths.Add(result);
             checkReady();
         }
 
@@ -70,6 +76,7 @@ namespace goaldis_gui {
             if (result == null)
                 return;
 
+            individualFile = false;
             currentDir = result;
             infoMsg.Text = "Current Directory: " + currentDir + "\n";
 
@@ -99,7 +106,7 @@ namespace goaldis_gui {
                 return;
 
             outputDir = result;
-            infoMsg.Text = "Current Directory: " + currentDir + "\n";
+            infoMsg.Text += "Output Directory: " + outputDir + "\n";
             checkReady();
         }
 
@@ -116,7 +123,48 @@ namespace goaldis_gui {
         }
 
         private void submitBtn_Click(object sender, RoutedEventArgs e) {
+            
+            foreach (String f in filePaths) {
+                
+                String dir = outputDir + "\\";
+                // for ps3 files, they are nested inside a final/game folder within the more general category
+                if (ps3 && individualFile is false)
+                    dir += Directory.GetParent(f).Parent.FullName.ToString() + "\\";
+                // Otherwise its ps2 and a container file
+                else if (ps3 is false)
+                    dir += System.IO.Path.GetFileNameWithoutExtension(f).ToString() + "\\";
+                
+                // Spawn a thread for each exe call for speed and GUI updating purposes
+                Thread t = new Thread(() => runDisassembler(f, dir));
+                t.Start();
+            }
+        }
 
+        private void runDisassembler(String file, String dir) {
+
+            // TODO
+            //logBox.Text += "Started Disassembling " + file + "\n";
+            
+            ProcessStartInfo callExe = new ProcessStartInfo();
+            callExe.CreateNoWindow = true;
+            callExe.UseShellExecute = true;
+            callExe.FileName = "..\\goaldis.exe";
+            callExe.WindowStyle = ProcessWindowStyle.Hidden;
+            if (ps3)
+                callExe.Arguments = "-file \"" + dir + "\" \"" + file + "\"";
+            else
+                callExe.Arguments = "-asm \"" + dir + "\" \"" + file + "\"";
+
+            try {
+                using (Process exeProcess = Process.Start(callExe)) {
+                    exeProcess.WaitForExit();
+                }
+            }
+            catch {
+                // Log error.
+            }
+
+            //logBox.Text += "Finished Disassembling " + file + ", stored at " + dir + "\n";
         }
 
         private String OpenFileDialog() {
