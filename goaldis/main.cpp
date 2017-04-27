@@ -131,16 +131,18 @@ void dumpAsmFile(const char *outdir, char *inputFile) {
 
     // Get file name
     // In the ps3 files, they are already prefixed
-    char *currentChar = &inputFile[strlen(inputFile)];
+    char *currentChar = &inputFile[strlen(inputFile)-1];
     string fileName;
     bool nameStarts = false;
-    while (*currentChar != '/') {
+    while (*currentChar != '\\') {
 
         if (nameStarts)
-            fileName += *currentChar;
+            fileName = *currentChar + fileName;
         // Skip the extension
         if (*currentChar == '.')
             nameStarts = true;
+
+        currentChar -= 1;
     }
 
     FILE *file = fopen(inputFile, "rb");
@@ -161,7 +163,7 @@ void dumpAsmFile(const char *outdir, char *inputFile) {
     go->shouldDump = true;
     go->name = fileName; 
     go->fileName = fileName; 
-    go->dgoname = "GAME.CGO"; // TODO may or may not be optional, never referenced anywhere
+    go->dgoname = "ART.CGO"; // TODO may or may not be optional, never referenced anywhere
     go->rawdata.resize(fileSize);
 
     // read the entire contents of the file into the struct
@@ -199,7 +201,7 @@ int main(int argc, char *argv[]) {
 
 	const char *mode = argv[1];
 	const char *outdir = argv[2];
-	const char *inputPath = argv[3];
+	char *inputPath = argv[3];
 	
 	_mkdir(outdir);
 	InitMachine();

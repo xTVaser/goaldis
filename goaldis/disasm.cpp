@@ -372,6 +372,7 @@ void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass, bool ps3Rip)
 {
 	disasmBegin(fp, go, final_pass);
 
+    // In the .o files, it is unable to find any objects.
 	for each (const MetaSegment &s in go->segments)
 	{
 		WRITE(";==================================================================\n");
@@ -400,6 +401,8 @@ void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass, bool ps3Rip)
                 TODO Might be wrong about PS3 Difference here, so this may just be a hack
                 For whatever reason, the PS3 files are missing data at the end, perhaps this is due to these final bytes being something to link
                 the files together and that is not needed with the modifications for the remaster? 
+
+                This applys to the .go files, but the .o files appear to have all needed information and just have some of it reordered.
 
                 This means the output disassembly is not 100% accurate, but for all of the beginning lines up to the end, it seems to be the same
             */

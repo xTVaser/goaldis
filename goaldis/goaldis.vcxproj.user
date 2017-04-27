@@ -4,7 +4,11 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>-asm "H:\Jak Disassembly\test\Disassembly\COMMON" "H:\Jak 1 - PS2 Rip\CGO\COMMON.CGO"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-file "H:\Jak Disassembly\test\Disassembly\game" "H:\Jak Disassembly\test\test dir\COMMON\game\dsk_obj\texture-upload.o"</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='test|Win32'">
+    <LocalDebuggerCommandArguments>-asm "H:\Jak Disassembly\test\Disassembly\game" "H:\Jak 1 - PS2 Rip\CGO\ART.CGO"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

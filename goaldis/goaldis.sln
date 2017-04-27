@@ -8,10 +8,13 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		test|Win32 = test|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D0C8D9E5-5EDA-4A76-89AD-4FE4C829F5F4}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D0C8D9E5-5EDA-4A76-89AD-4FE4C829F5F4}.Debug|Win32.Build.0 = Debug|Win32
+		{D0C8D9E5-5EDA-4A76-89AD-4FE4C829F5F4}.test|Win32.ActiveCfg = test|Win32
+		{D0C8D9E5-5EDA-4A76-89AD-4FE4C829F5F4}.test|Win32.Build.0 = test|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
