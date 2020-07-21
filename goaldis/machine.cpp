@@ -62,6 +62,10 @@ char *sym_name(symbol *s)
 	int id = s - s7;
 	assert(id >= 0 && id < numSymbols);
 	char *n = names[id];
+	if (n == NULL) {
+		// Exception here, easier to set a breakpoint
+		assert(n);
+	}
 	assert(n);
 	return n;
 }

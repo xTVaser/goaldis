@@ -17,4 +17,14 @@
     <ClInclude Include="lzoconf.h" />
     <ClInclude Include="lzodefs.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="test">
+      <UniqueIdentifier>{909cafbb-981c-4ade-8d66-07223a9c4b67}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\test\COMMON.CGO">
+      <Filter>test</Filter>
+    </None>
+  </ItemGroup>
 </Project>

@@ -53,3 +53,4 @@ Debug/
 *.VC.db
 *.VC.VC.opendb
 *.vcxproj.user
+*.exe

@@ -61,6 +61,9 @@
     <ClInclude Include="opcodes.h" />
     <ClInclude Include="goaldis.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\test\COMMON.CGO" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

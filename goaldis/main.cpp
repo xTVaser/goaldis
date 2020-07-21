@@ -154,7 +154,7 @@ void dumpRawBin(const char *outdir, MetaGoFile *go)
 
 int main(int argc, char *argv[])
 {
-	if (argc != 4)
+	/*if (argc != 4)
 	{
 		fprintf(stderr, "Usage: goaldis mode output-dir input.dgo\n");
 		fprintf(stderr, "\n");
@@ -167,29 +167,33 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "        -bin       Extract raw binary files\n");
 		fprintf(stderr, "        -asm       Disassemble back to MIPS assembly\n");
 		return 1;
-	}
+	}*/
 
-	const char *mode = argv[1];
-	const char *outdir = argv[2];
-	const char *inDgo = argv[3];
-
-	_mkdir(outdir);
+	// const char *mode = argv[1];
+	// const char *outdir = argv[2];
+	// const char *inDgo = argv[3];
+	const char *mode = "-asm";
+	// NOTE - Change Paths! Hacky Testing
+	const char *inDir = "C:\\Users\\xtvas\\Repositories\\goaldis\\test\\COMMON.CGO";
+	const char *outDir = "C:\\Users\\xtvas\\Repositories\\goaldis\\test\\output";
+	
+	_mkdir(outDir);
 
 	if (!strcmp(mode, "-dcp")) {
-		decompress(inDgo, outdir);
+		decompress(inDir, outDir);
 		return 0;
 	}
 
 	InitMachine();
 
-	loadDgo(inDgo, true);
+	loadDgo(inDir, true);
 
 	if (!strcmp(mode, "-bin")) {
 		for (MetaGoFile *go : metaGoFiles)
-			dumpRawBin(outdir, go);
+			dumpRawBin(outDir, go);
 	} else if (!strcmp(mode, "-asm")) {
 		for each (MetaGoFile *go in metaGoFiles)
-			dumpAsm(outdir, go);
+			dumpAsm(outDir, go);
 	} else {
 		fprintf(stderr, "goaldis: Invalid mode '%s'.\n", mode);
 		return 1;
