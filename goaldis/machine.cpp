@@ -181,7 +181,8 @@ void set_fixed_type(FixedSym id, const char *name, symbol *parentTypeSym, uint64
 
 void InitMachine()
 {
-	int maxSyms = 0x20000;
+	// Jak 1 has a max of 0x20000 but jak 2 has 0x30000
+	int maxSyms = 0x30000;
 	s7 = new symbol[maxSyms];
 	names = new char*[maxSyms];
 	memset(s7, 0, sizeof(symbol)*maxSyms);

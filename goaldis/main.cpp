@@ -205,6 +205,12 @@ int main(int argc, char *argv[])
 
 	if (!strcmp(mode, "-asm")) {
 		for each (MetaGoFile * go in metaGoFiles) {
+			// Debugging!
+			if (go->fileName != "airlock") {
+				continue;
+			}
+
+
 			printf("goaldis: Disassembling - '%s'\n", go->fileName.c_str());
 			bool success = dumpAsm(outputDirectory, go);
 			if (!success) {

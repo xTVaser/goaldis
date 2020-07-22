@@ -435,10 +435,16 @@ bool disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
 
 		std::sort(objs.begin(), objs.end());
 
+		int i = 0;
 		for each (uint32_t *obj in objs)
-		{
+		{	
+			i++;
 			if (obj < prev)
 				continue;
+
+			if (i == 20) {
+				print("hey");
+			}
 
 			disasmData(prev, obj - 1, end);
 			prev = disasmObj(obj, s.start, end);
@@ -451,6 +457,7 @@ bool disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
 			printf("goaldis: ERROR - TODO - Could not Disasm Object\n");
 			return false;
 		}
+		
 		disasmData(prev, end, end);
 	}
 
