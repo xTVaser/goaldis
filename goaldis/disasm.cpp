@@ -109,7 +109,9 @@ static string relocTarget(uint32_t *addr)
 		int16_t i = (int16_t)((*addr) & 0xffff);
 		return SYMBOL(s7 + ((uint16_t)i)/sizeof(symbol));
 	}
-	default:				assert(0); return "";
+	default:
+		assert(0);
+		return "";
 	}
 }
 
@@ -272,12 +274,51 @@ uint32_t *disasmFunc(uint32_t *obj, void *segment_end)
 	return end;
 }
 
-void disasmData(uint32_t *start, uint32_t *end, void *segment_end)
+// Naively copy pasting!
+uint32_t *disasmThread(uint32_t *obj, void *segment_end)
+{
+	uint32_t *end;
+
+	string name = LABEL(obj);
+
+	while (true)
+	{
+		pass_finished = true;
+		end = doPass(obj, segment_end);
+		if (pass_finished)
+			break;
+	}
+
+	return end;
+}
+
+// Naively copy pasting!
+uint32_t *disasmType(uint32_t *obj, void *segment_end)
+{
+	uint32_t *end;
+
+	string name = LABEL(obj);
+
+	while (true)
+	{
+		pass_finished = true;
+		end = doPass(obj, segment_end);
+		if (pass_finished)
+			break;
+	}
+
+	return end;
+}
+
+bool disasmData(uint32_t *start, uint32_t *end, void *segment_end)
 {
 	if (start == end)
-		return;
+		return true;
 
-	assert(start < end);
+	if (start > end) {
+		printf("goaldis: ERROR - TODO - Disassembling out of bounds data\n");
+		return false;
+	}
 
 	// Check for uninitialized data at the end of art-group files.
 	// (TODO: detection not perfect)
@@ -352,7 +393,9 @@ uint32_t *disasmObj(uint32_t *obj, uint32_t *segment_start, uint32_t *segment_en
 	switch (id)
 	{
 	case s_function: end = disasmFunc(obj, segment_end); break;
+	case s_thread: end = disasmThread(obj, segment_end); break;
 	case s_string: end = disasmString(obj, segment_end); break;
+	case s_type: end = disasmType(obj, segment_end); break;
 	default:
 		end = obj; break;
 	}
@@ -368,7 +411,7 @@ void disasmEnd()
 		labels.clear();
 }
 
-void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
+bool disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
 {
 	disasmBegin(fp, go, final_pass);
 
@@ -399,10 +442,15 @@ void disasmFile(FILE *fp, MetaGoFile *go, bool final_pass)
 
 			disasmData(prev, obj - 1, end);
 			prev = disasmObj(obj, s.start, end);
-			assert(prev <= end);
+			if (prev > end) {
+				printf("goaldis: ERROR - TODO - Could not Disasm Object\n");
+				return false;
+			}
 		}
-
-		assert(prev <= end);
+		if (prev > end) {
+			printf("goaldis: ERROR - TODO - Could not Disasm Object\n");
+			return false;
+		}
 		disasmData(prev, end, end);
 	}
 

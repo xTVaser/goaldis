@@ -120,7 +120,7 @@ void decompress(const char *dgoname, const char *outdir)
 	fclose(out);
 }
 
-void dumpAsm(const char *outdir, MetaGoFile *go)
+bool dumpAsm(const char *outdir, MetaGoFile *go)
 {
 	char fileName[1024];
 	sprintf(fileName, "%s\\%s.asm", outdir, go->fileName.c_str());
@@ -132,9 +132,18 @@ void dumpAsm(const char *outdir, MetaGoFile *go)
 		exit(1);
 	}
 
-	disasmFile(fp, go, false);
-	disasmFile(fp, go, true);
+	bool ok = disasmFile(fp, go, false);
+	if (!ok) {
+		printf("goaldis: Error - Unable to Disassemble File\n");
+	}
+	if (ok) {
+		ok = disasmFile(fp, go, true);
+		if (!ok) {
+			printf("goaldis: Error - Unable to Disassemble File on Final Pass\n");
+		}
+	}
 	fclose(fp);
+	return ok;
 }
 
 void dumpRawBin(const char *outdir, MetaGoFile *go)
@@ -169,31 +178,45 @@ int main(int argc, char *argv[])
 		return 1;
 	}*/
 
-	// const char *mode = argv[1];
-	// const char *outdir = argv[2];
-	// const char *inDgo = argv[3];
-	const char *mode = "-asm";
+	if (argc != 3) {
+		fprintf(stderr, "TEMPORARY USAGE - `goaldis <INPUT FILE (.CGO/.DGO)> <OUTPUT DIRECTORY>");
+		return 1;
+	}
+
+
+	//const char *mode = argv[1];
+	//const char *outDir = argv[2];
+	//const char *inDir = argv[3];
 	// NOTE - Change Paths! Hacky Testing
-	const char *inDir = "C:\\Users\\xtvas\\Repositories\\goaldis\\test\\COMMON.CGO";
-	const char *outDir = "C:\\Users\\xtvas\\Repositories\\goaldis\\test\\output";
+	const char *mode = "-asm";
+	const char *inputFile = argv[1]; //"C:\\Users\\xtvas\\Repositories\\goaldis\\test\\COMMON.CGO";
+	const char *outputDirectory = argv[2]; //"C:\\Users\\xtvas\\Repositories\\goaldis\\test\\output";
 	
-	_mkdir(outDir);
+	_mkdir(outputDirectory);
 
 	if (!strcmp(mode, "-dcp")) {
-		decompress(inDir, outDir);
+		decompress(inputFile, outputDirectory);
 		return 0;
 	}
 
 	InitMachine();
 
-	loadDgo(inDir, true);
+	loadDgo(inputFile, true);
 
-	if (!strcmp(mode, "-bin")) {
+	if (!strcmp(mode, "-asm")) {
+		for each (MetaGoFile * go in metaGoFiles) {
+			printf("goaldis: Disassembling - '%s'\n", go->fileName.c_str());
+			bool success = dumpAsm(outputDirectory, go);
+			if (!success) {
+				printf("goaldis: Unable to Disassemble - '%s\n'", go->fileName.c_str());
+			}
+			else {
+				printf("goaldis: Successfully Disassembled - '%s'\n", go->fileName.c_str());
+			}
+		}
+	} else if (!strcmp(mode, "-bin")) {
 		for (MetaGoFile *go : metaGoFiles)
-			dumpRawBin(outDir, go);
-	} else if (!strcmp(mode, "-asm")) {
-		for each (MetaGoFile *go in metaGoFiles)
-			dumpAsm(outDir, go);
+			dumpRawBin(outputDirectory, go);
 	} else {
 		fprintf(stderr, "goaldis: Invalid mode '%s'.\n", mode);
 		return 1;

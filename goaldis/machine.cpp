@@ -60,13 +60,17 @@ char *sym_name(symbol *s)
 {
 	assert(s);
 	int id = s - s7;
-	assert(id >= 0 && id < numSymbols);
+	if (id < 0 || id > numSymbols) {
+		printf("goaldis: Error - Symbol ID out of bounds [%d] out of [%d] possible symbols\n", id, numSymbols);
+		// hard to bubble this error up
+		return "???";
+	}
 	char *n = names[id];
 	if (n == NULL) {
-		// Exception here, easier to set a breakpoint
-		assert(n);
+		printf("goaldis: Error - Symbol ID (%d) resolved to no name\n", id);
+		// hard to bubble this error up
+		return "???";
 	}
-	assert(n);
 	return n;
 }
 
@@ -195,4 +199,13 @@ void InitMachine()
 	set_fixed_type(s_basic, "basic", &s7[s_structure], (uint64_t(9)<<32) | 4, NULL, NULL);
 	set_fixed_type(s_string, "string", &s7[s_basic], (uint64_t(9)<<32) | 8, NULL, NULL);
 	set_fixed_type(s_function, "function", &s7[s_basic], (uint64_t(9)<<32) | 4, NULL, NULL);
+
+
+	// New Jak 2 Stuff
+	set_fixed_type(s_thread, "thread", &s7[s_basic], (uint64_t(9)<<32) | 0x28, NULL, NULL);
+
+	set_fixed_type(s_type, "type", &s7[s_basic], (uint64_t(9)<<32) | 0x38, NULL, NULL);
+	set_fixed_type(s_symbol, "symbol", &s7[s_object], (uint64_t(9)<<32) | 4, NULL, NULL);
+
+	set_fixed_type(s_kheap, "kheap", &s7[s_structure], (uint64_t(9)<<32) | 0x10, NULL, NULL);
 }
